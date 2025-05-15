@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Your Cart</h1>
+
+        <!-- Display Cart Items Here -->
+        <div id="cart-items"></div>
+
+        <div class="text-center mt-4">
+            <a href="checkout.html" class="btn btn-primary">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <script>
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = ''; // Clear previous items
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+            } else {
+                cart.forEach(item => {
+                    cartItemsContainer.innerHTML += `
+                        <div class="cart-item">
+                            <img src="${item.image}" alt="${item.name}" width="50" />
+                            <p>${item.name} - $${item.price}</p>
+                            <button onclick="removeFromCart(${item.id})">Remove</button>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function removeFromCart(itemId) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.id !== itemId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        // Load the cart when the page loads
+        loadCart();
+    </script>
+</body>
+</html>
